@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html xmlns:th="http://thymeleaf.org" >
+<head>
+    <meta charset="UTF-8">
+    <title>AG - Gráfico</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js"></script></head>
+</head>
+<body>
+    <!--NAVBAR -->
+    <th:block th:include="navbar"></th:block>
+
+
+    <!--GRAFICO-->
+
+    <th:block th:include="lineChart"></th:block>
+
+    <div class="text-center" style="margin: 0 20%">
+        <form th:action="@{/grafico}" method="get">
+            <select class="custom-select" name="keyword" style="width: 300px; margin: 20px">
+            </select>
+            <button type="submit" class="btn btn-light">Filtrar</button>
+        </form>
+    </div>
+
+
+<script  type="text/javascript" th:inline="javascript">
+    //essa seção é responsável por puxar do controller os dados
+    /*<![CDATA[*/
+    var dados = [[${listaDados}]];
+    var tipos = [[${listaTipos}]];
+    var empresas = [[${listaEmpresas}]];
+    var titulo = [[${tituloDoGrafco}]];
+
+    /*]]>*/
+
+    var selector = document.querySelector('select.custom-select');
+    tipos.forEach(function (tipo){
+        var option = document.createElement('option');
+        var textnode = document.createTextNode(tipo);
+        option.appendChild(textnode);
+        selector.appendChild(option);
+    });
+
+    function sortFunction(a,b){
+        if (a[0] === b[0]) {
+            return 0;
+        }
+        else {
+            return (a[0] < b[0]) ? -1 : 1;
+        }if (a[0] === b[0]) {
+            return 0;
+        }
+        else {
+            return (a[0] < b[0]) ? -1 : 1;
+        }
+    }
+    var anos = [];
+    var objArray= [];
+    empresas.forEach(function (empresa){
+        var valoresEmpresa = [];
+        dados.forEach(function (dado){
+            if(dado.empresaModel.nome == empresa){
+                valoresEmpresa.push([dado.label,dado.valor]);
+            }
+        });
+        valoresEmpresa.sort(sortFunction);
+        var obj = {}
+       var value = [];
+
+       valoresEmpresa.forEach(function (valor){
+           anos.push(valor[0]);
+           value.push(valor[1]);
+       });
+
+       obj.data = value;
+       obj.label = empresa;
+       obj.borderColor= "#000000".replace(/0/g,function(){return (~~(Math.random()*16)).toString(16);});
+       obj.fill = false;
+       objArray.push(obj);
+
+    });
+
+    function onlyUnique(value, index, self) {
+        return self.indexOf(value) === index;
+    }
+    var anosUnicos = anos.filter(onlyUnique);
+
+    //essa seção é responsável por criar o gráfico
+    new Chart(document.getElementById("line-chart"), {
+        type: 'line',
+        data: {
+            labels: anosUnicos,
+            datasets: objArray
+        },
+        options: {
+            responsive: false,
+            title: {
+                display: true,
+                text: titulo
+            },
+            elements: {
+                line: {
+                    tension: 0
+                }
+            }
+        }
+    });
+
+
+
+
+
+
+</script>
+</body>
+</html>

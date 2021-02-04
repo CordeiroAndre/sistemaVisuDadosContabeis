@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="pt"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://thymeleaf.org">
+<head>
+</head>
+<body>
+<button type="button" class="btn btn-light" data-toggle="modal" data-target="#exampleModalLong">
+ Valor Existente
+</button>
+
+<div  class="modal  fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div  class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Adicionar Valor existente</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div  class="modal-body ">
+                <div class="d-flex justify-content-center">
+                    <input type="text" class="form-control filtro" placeholder="Filtrar por Tipo" style="margin: 1% 0; width: 50%"/>
+                </div>
+                <th:block data-dismiss="modal" th:include="tabelaAdicionarDado"></th:block>
+            </div>
+
+        </div>
+    </div>
+</div>
+    <script  type="text/javascript" th:inline="javascript" >
+        /*<![CDATA[*/
+        var tipos = [[${listaDadosUnicos}]];
+        /*]]>*/
+    const filtro = document.querySelector(".filtro");
+    const dados = Array.from(document.querySelectorAll("tr"));
+
+    filtro.addEventListener('input',function (e){
+        if(filtro.value=="" || filtro.value==null) {
+            dados.forEach(function (dado) {
+                dado.classList.remove('d-none');
+            });
+        }
+        else{
+            tipos.forEach(function (tipo){
+               if(filtro.value==tipo){
+                   dados.forEach(function (dado){
+                       if(dado.children[2].textContent==filtro.value){
+                           dado.classList.remove('d-none');
+                       }
+                       else{
+                           dado.classList.add('d-none');
+                       }
+
+                   });
+
+
+               }
+            });
+        }
+
+    });
+
+    </script>
+
+</body>
+</html>

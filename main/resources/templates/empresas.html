@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://thymeleaf.org" >
+<head>
+    <meta charset="UTF-8">
+    <title>AG - empresas</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js"></script></head>
+</head>
+<body >
+<!--NAVBAR -->
+<th:block th:include="navbar"></th:block>
+
+    <div style="margin:100px 20% 20px;" class="text-center">
+        <form style="width: 500px; margin:20px 35%" th:action="@{/empresas}" method="get">
+            <div class="form-row">
+                <input style="width: 50%" id="txtSearch" class="form-control" type="text" name="keyword"/>
+                <button type="submit" class="btn btn-light" style="margin-left: 1%">Filtrar</button>
+            </div>
+        </form>
+        <div style="max-height: 300px; overflow: auto;">
+            <th:block th:include="tabelaEmpresas"></th:block>
+        </div>
+    </div>
+    <div style="margin: 0 20%">
+        <a href="/empresas/adicionarEmpresa" class="btn btn-light">Adicionar Empresa</a>
+        <a href="/empresas/adicionarDado" class="btn btn-light">Adicionar Dado</a>
+        <a href="/empresas/editarEmpresa" class="btn btn-light">Editar Empresa</a>
+
+    </div>
+
+
+
+
+</body>
+</html>
